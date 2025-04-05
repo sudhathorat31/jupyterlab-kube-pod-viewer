@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.3.8
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: sudhathorat31@gmail.com
+author_name: Sudha Thorat
+has_binder: true
+has_settings: false
+kind: frontend
+labextension_name: kube-pod-viewer
+project_short_description: A JupyterLab extension to list current Pods in a given
+    Kubernetes namespace.
+python_name: kube_pod_viewer
+repository: https://github.com/sudhathorat31/kube-pod-viewer
+test: true
+
