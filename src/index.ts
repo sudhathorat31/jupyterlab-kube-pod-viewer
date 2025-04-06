@@ -2,16 +2,16 @@ import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
-import { MainAreaWidget } from '@jupyterlab/apputils';
 import { ILauncher } from '@jupyterlab/launcher';
-import { CounterWidget } from './MyWidgets';
+import { MainAreaWidget } from '@jupyterlab/apputils';
 import { reactIcon } from '@jupyterlab/ui-components';
+import { PodViewerWidget } from './PodViewerWidget';
 
 /**
  * The command IDs used by the react-widget plugin.
  */
 namespace CommandIDs {
-  export const counter = 'counter-react-widget';
+  export const kubePodViewer = 'kube-pod-viewer-react-widget';
 }
 
 /**
@@ -24,25 +24,22 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   optional: [ILauncher],
   activate: (app: JupyterFrontEnd, launcher: ILauncher) => {
-    console.log('JupyterLab extension kube-pod-viewer is activated!');
-
     const { commands } = app;
 
-    const command = CommandIDs.counter;
+    const command = CommandIDs.kubePodViewer;
     commands.addCommand(command, {
-      caption: 'Open a new Counter React Widget',
-      label: 'Counter React Widget',
+      caption: 'View pods in Kubernetes cluster',
+      label: 'Kube Pod Viewer',
       icon: args => (args['isPalette'] ? undefined : reactIcon),
       execute: () => {
-        const counterWidget = new CounterWidget();
-        const widget = new MainAreaWidget<CounterWidget>({
-          content: counterWidget
-        });
-        widget.title.label = 'Counter React Widget';
+        const content = new PodViewerWidget();
+        const widget = new MainAreaWidget<PodViewerWidget>({ content });
+        widget.title.label = 'Kube Pod Viewer';
         widget.title.icon = reactIcon;
         app.shell.add(widget, 'main');
       }
     });
+
     if (launcher) {
       launcher.add({
         command

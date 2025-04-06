@@ -3,11 +3,3 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
-
-.jp-react-widget {
-  font-size: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
