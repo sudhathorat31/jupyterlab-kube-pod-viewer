@@ -24,6 +24,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
   autoStart: true,
   optional: [ILauncher],
   activate: (app: JupyterFrontEnd, launcher: ILauncher) => {
+    console.log('JupyterLab extension kube-pod-viewer is activated!');
     const { commands } = app;
 
     const command = CommandIDs.kubePodViewer;
