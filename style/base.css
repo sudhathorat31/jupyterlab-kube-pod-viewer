@@ -5,9 +5,9 @@
 */
 
 .jp-react-widget {
-    font-size: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  font-size: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
