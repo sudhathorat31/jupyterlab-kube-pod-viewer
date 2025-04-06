@@ -10,6 +10,6 @@ labextension_name: kube-pod-viewer
 project_short_description: A JupyterLab extension to list current Pods in a given
     Kubernetes namespace.
 python_name: kube_pod_viewer
-repository: https://github.com/sudhathorat31/kube-pod-viewer
+repository: https://github.com/sudhathorat31/jupyterlab-kube-pod-viewer
 test: true
 

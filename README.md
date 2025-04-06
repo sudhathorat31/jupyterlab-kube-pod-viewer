@@ -1,7 +1,7 @@
 # kube_pod_viewer
 
-[![Github Actions Status](https://github.com/sudhathorat31/kube-pod-viewer/workflows/Build/badge.svg)](https://github.com/sudhathorat31/kube-pod-viewer/actions/workflows/build.yml)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sudhathorat31/kube-pod-viewer/main?urlpath=lab)
+[![Github Actions Status](https://github.com/sudhathorat31/jupyterlab-kube-pod-viewer/workflows/Build/badge.svg)](https://github.com/sudhathorat31/jupyterlab-kube-pod-viewer/actions/workflows/build.yml)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sudhathorat31/jupyterlab-kube-pod-viewer/main?urlpath=lab)
 
 A JupyterLab extension to list current Pods in a given Kubernetes namespace.
 
