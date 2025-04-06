@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from 'react';
 
-const mockPods: { [key: string]: string[] } = {
-  default: ['pod-a', 'pod-b'],
-  kubeSystem: ['kube-dns', 'metrics-server']
-};
-
 export const PodViewerComponent = () => {
   const [namespace, setNamespace] = useState('default');
   const [pods, setPods] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulate fetch
-    setPods(mockPods[namespace] || []);
+    // Fetch the pods from the FastAPI backend
+    const fetchPods = async () => {
+      try {
+        const response = await fetch(
+          `https://kube-pod-viewer.onrender.com/pods/${namespace}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setPods(data.pods);
+        } else {
+          throw new Error('Failed to fetch pods');
+        }
+      } catch (err: unknown) {
+        // Type the error to `Error` to access `err.message`
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
+    };
+    fetchPods();
   }, [namespace]);
+
   return (
     <div style={{ padding: '1rem' }}>
       <h2>Pod Viewer</h2>
@@ -22,19 +39,20 @@ export const PodViewerComponent = () => {
         value={namespace}
         onChange={e => setNamespace(e.target.value)}
       >
-        {Object.keys(mockPods).map(ns => (
-          <option key={ns} value={ns}>
-            {ns}
-          </option>
-        ))}
+        <option value="default">default</option>
+        <option value="kubeSystem">kubeSystem</option>
       </select>
 
       <h3>Pods in "{namespace}"</h3>
-      <ul>
-        {pods.map(pod => (
-          <li key={pod}>{pod}</li>
-        ))}
-      </ul>
+      {error ? (
+        <div style={{ color: 'red' }}>Error: {error}</div>
+      ) : (
+        <ul>
+          {pods.map(pod => (
+            <li key={pod}>{pod}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
