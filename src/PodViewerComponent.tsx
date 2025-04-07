@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 type Pod = {
@@ -9,10 +9,6 @@ type Pod = {
 
 export const PodViewerComponent = () => {
   const [namespace, setNamespace] = useState('default');
-  //const [namespacesList, setNamespacesList] = useState<string[]>([]);
-  //const [pods, setPods] = useState<Pod[]>([]);
-  //const [error, setError] = useState<string | null>(null);
-
   const {
     data: namespaces = [],
     isLoading: nsLoading,
@@ -22,51 +18,6 @@ export const PodViewerComponent = () => {
     const data = await res.json();
     return data;
   });
-  /*useEffect(() => {
-    const fetchNamespaces = async () => {
-      try {
-        const response = await fetch(
-          'https://kube-pod-viewer.onrender.com/namespaces'
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setNamespacesList(data);
-          if (data.length > 0) {
-            setNamespace(data[0]);
-          }
-        } else {
-          throw new Error('Failed to fetch namespaces');
-        }
-      } catch (err) {
-        console.error('Namespace fetch error:', err);
-      }
-    };
-
-    fetchNamespaces();
-  }, []);
-
-  useEffect(() => {
-    const fetchPods = async () => {
-      try {
-        const response = await fetch(
-          `https://kube-pod-viewer.onrender.com/namespaces/${namespace}/pods`
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setPods(data.pods);
-        } else {
-          throw new Error('Failed to fetch pods');
-        }
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred');
-        }
-      }
-    };
-    fetchPods();
-  }, [namespace]);*/
   const {
     data: pods = [],
     isLoading: podsLoading,
