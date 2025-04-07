@@ -1,16 +1,45 @@
 import React, { useState, useEffect } from 'react';
 
+type Pod = {
+  name: string;
+  status: string;
+  age: string;
+};
+
 export const PodViewerComponent = () => {
   const [namespace, setNamespace] = useState('default');
-  const [pods, setPods] = useState<string[]>([]);
+  const [namespacesList, setNamespacesList] = useState<string[]>([]);
+  const [pods, setPods] = useState<Pod[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch the pods from the FastAPI backend
+    const fetchNamespaces = async () => {
+      try {
+        const response = await fetch(
+          'https://kube-pod-viewer.onrender.com/namespaces'
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setNamespacesList(data);
+          if (data.length > 0) {
+            setNamespace(data[0]);
+          }
+        } else {
+          throw new Error('Failed to fetch namespaces');
+        }
+      } catch (err) {
+        console.error('Namespace fetch error:', err);
+      }
+    };
+
+    fetchNamespaces();
+  }, []);
+
+  useEffect(() => {
     const fetchPods = async () => {
       try {
         const response = await fetch(
-          `https://kube-pod-viewer.onrender.com/pods/${namespace}`
+          `https://kube-pod-viewer.onrender.com/namespaces/${namespace}/pods`
         );
         if (response.ok) {
           const data = await response.json();
@@ -19,7 +48,6 @@ export const PodViewerComponent = () => {
           throw new Error('Failed to fetch pods');
         }
       } catch (err: unknown) {
-        // Type the error to `Error` to access `err.message`
         if (err instanceof Error) {
           setError(err.message);
         } else {
@@ -31,27 +59,47 @@ export const PodViewerComponent = () => {
   }, [namespace]);
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h2>Pod Viewer</h2>
-      <label htmlFor="namespace-select">Select Namespace:</label>
-      <select
-        id="namespace-select"
-        value={namespace}
-        onChange={e => setNamespace(e.target.value)}
-      >
-        <option value="default">default</option>
-        <option value="kubeSystem">kubeSystem</option>
-      </select>
+    <div className="container">
+      <h1 className="title">Pod Viewer</h1>
+      <div className="dropdown-group">
+        <label htmlFor="namespace-select">Select Namespace:</label>
+        <select
+          id="namespace-select"
+          value={namespace}
+          onChange={e => setNamespace(e.target.value)}
+        >
+          {namespacesList.map(ns => (
+            <option key={ns} value={ns}>
+              {ns}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <h3>Pods in "{namespace}"</h3>
       {error ? (
-        <div style={{ color: 'red' }}>Error: {error}</div>
+        <div id="error-message" className="error-message">
+          Error:{error}
+        </div>
       ) : (
-        <ul>
-          {pods.map(pod => (
-            <li key={pod}>{pod}</li>
-          ))}
-        </ul>
+        <table id="pods-table">
+          <thead>
+            <tr>
+              <th>Pod Name</th>
+              <th>Status</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pods.map(pod => (
+              <tr key={pod.name}>
+                <td>{pod.name}</td>
+                <td>{pod.status}</td>
+                <td>{pod.age}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
