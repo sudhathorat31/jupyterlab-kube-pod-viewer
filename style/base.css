@@ -3,7 +3,7 @@
 
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html */
 
-/* stylelint-disable-next-line color-function-notation */
+
 .container {
   max-width: 900px;
   margin: 40px auto;
@@ -11,6 +11,7 @@
   padding: 20px;
   color: #1e1e1e;
   background-color: #fff;
+  /* stylelint-disable-next-line color-function-notation alpha-value-notation */
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
 }
