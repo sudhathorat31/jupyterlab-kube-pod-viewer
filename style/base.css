@@ -1,53 +1,155 @@
 /*
     See the JupyterLab Developer Guide for useful CSS Patterns:
 
-    https://jupyterlab.readthedocs.io/en/stable/developer/css.html
-*/
+    https://jupyterlab.readthedocs.io/en/stable/developer/css.html*/
+
+/* Container */
+
 .container {
-  max-width: 800px;
-  margin: 40px auto;
-  font-family: Arial, sans-serif;
-  padding: 20px;
-}
+    max-width: 900px;
+    margin: 40px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    color: #1e1e1e;
+    background-color: #ffffff;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+  }
+  /* Title */
+  .title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Dropdown */
+  .dropdown-group {
+    margin-bottom: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  select {
+    padding: 6px 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Responsive Table Wrapper */
+  .table-wrapper {
+    max-height: 60vh;
+    border: 1px solid #ddd;
+    overflow-y: auto;
+    border-radius: 8px;
+  }
+  
+  /* Table*/
+  #pods-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    min-width: 600px;
+    border-radius: 12px;
+    table-layout: fixed;
+  } 
 
-.title {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
+  #pods-table thead {
+    background-color: #f5f5f5;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  #pods-table th,
+  #pods-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    word-wrap: break-word;
+  }
+  
+  #pods-table th {
+    background-color: #f0f4f8;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  #pods-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  #pods-table tr:hover {
+    background-color: #eef6fc;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  /* Error */
+  .error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  
+  .no-data {
+    padding: 12px;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+  }
 
-.dropdown-group {
-  margin-bottom: 20px;
-}
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    text-transform: capitalize;
+  }
+  
+  .status-running {
+    background-color: #22c55e; /* Tailwind green-500 */
+  }
+  
+  .status-pending {
+    background-color: #facc15; /* Tailwind yellow-400 */
+    color: #333;
+  }
+  
+  .status-failed {
+    background-color: #ef4444; /* Tailwind red-500 */
+  }
 
-label {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-select {
-  padding: 5px;
-  font-size: 1rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-th,
-td {
-  padding: 12px;
-  border: 1px solid #ccc;
-  text-align: left;
-}
-
-th {
-  background-color: #f4f4f4;
-}
-
-.error-message {
-  color: red;
-  font-weight: bold;
-  margin-top: 15px;
-}
+  /* Mobile Responsive */
+  @media screen and (max-width: 600px) {
+    .container {
+      padding: 15px;
+    }
+  
+    .title {
+      font-size: 1.5rem;
+    }
+  
+    .dropdown-group {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    label {
+      margin-bottom: 8px;
+    }
+  
+    select {
+      width: 100%;
+    }
+  }
+  

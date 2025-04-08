@@ -4,7 +4,7 @@ import {
 } from '@jupyterlab/application';
 import { ILauncher } from '@jupyterlab/launcher';
 import { MainAreaWidget } from '@jupyterlab/apputils';
-import { reactIcon } from '@jupyterlab/ui-components';
+import { listIcon } from '@jupyterlab/ui-components';
 import { PodViewerWidget } from './PodViewerWidget';
 
 /**
@@ -31,12 +31,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
     commands.addCommand(command, {
       caption: 'View pods in Kubernetes cluster',
       label: 'Kube Pod Viewer',
-      icon: args => (args['isPalette'] ? undefined : reactIcon),
+      icon: args => (args['isPalette'] ? undefined : listIcon),
       execute: () => {
         const content = new PodViewerWidget();
         const widget = new MainAreaWidget<PodViewerWidget>({ content });
         widget.title.label = 'Kube Pod Viewer';
-        widget.title.icon = reactIcon;
+        widget.title.icon = listIcon;
         app.shell.add(widget, 'main');
       }
     });

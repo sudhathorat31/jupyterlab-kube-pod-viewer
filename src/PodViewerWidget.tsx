@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 export class PodViewerWidget extends ReactWidget {
   constructor() {
     super();
-    this.addClass('my-react-widget');
   }
 
   render() {

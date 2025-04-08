@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 type Pod = {
@@ -9,45 +9,64 @@ type Pod = {
 
 export const PodViewerComponent = () => {
   const [namespace, setNamespace] = useState('default');
+  const [namespaces, setNamespaces] = useState<string[]>([]);
   const {
-    data: namespaces = [],
+    refetch: refetchNamespaces,
     isLoading: nsLoading,
     error: nsError
-  } = useQuery(['namespaces'], async () => {
-    const res = await fetch('https://kube-pod-viewer.onrender.com/namespaces');
-    const data = await res.json();
-    return data;
-  });
+  } = useQuery(
+    ['namespaces'],
+    async () => {
+      const res = await fetch(
+        'https://kube-pod-viewer.onrender.com/namespaces'
+      );
+      const data = await res.json();
+      setNamespaces(data);
+      if (!namespace && data.length > 0) {
+        setNamespace(data[0]);
+      }
+      return data;
+    },
+    { enabled: false }
+  );
   const {
     data: pods = [],
+    refetch: refetchPods,
     isLoading: podsLoading,
     error: podsError
   } = useQuery(
-    ['pods', namespace],
+    ['pods'],
     async () => {
       const res = await fetch(
         `https://kube-pod-viewer.onrender.com/namespaces/${namespace}/pods`
       );
       const data = await res.json();
-      return data.pods;
+      console.log(data);
+      return data;
     },
     {
-      enabled: !!namespace
+      enabled: false
     }
   );
 
-  React.useEffect(() => {
-    if (namespaces.length > 0 && !namespace) {
-      setNamespace(namespaces[0]);
+  useEffect(() => {
+    if (namespaces.length === 0) {
+      refetchNamespaces();
     }
-  }, [namespaces]);
+  }, []);
+
+  useEffect(() => {
+    if (namespace) {
+      refetchPods();
+    }
+  }, [namespace]);
   return (
     <div className="container">
       <h1 className="title">Pod Viewer</h1>
       {nsLoading ? (
         <p>Loading namespaces...</p>
       ) : nsError ? (
-        <p>Error loading namespaces</p>
+        <p className="error-message">Error loading namespaces</p>
       ) : (
         <div className="dropdown-group">
           <label htmlFor="namespace-select">Select Namespace:</label>
@@ -69,27 +88,43 @@ export const PodViewerComponent = () => {
       {podsLoading ? (
         <p>Loading pods...</p>
       ) : podsError ? (
-        <p>Error loading pods</p>
+        <p className="error-message">Error loading pods</p>
+      ) : pods.length === 0 ? (
+        <p className="no-data">No pods available in this namespace.</p>
       ) : (
-        <table id="pods-table">
-          <thead>
-            <tr>
-              <th>Pod Name</th>
-              <th>Status</th>
-              <th>Age</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pods &&
-              pods.map((pod: Pod) => (
-                <tr key={pod.name}>
-                  <td>{pod.name}</td>
-                  <td>{pod.status}</td>
-                  <td>{pod.age}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="table-wrapper">
+          <table id="pods-table">
+            <thead>
+              <tr>
+                <th>Pod Name</th>
+                <th>Status</th>
+                <th>Age</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pods &&
+                pods.map((pod: Pod) => (
+                  <tr key={pod.name}>
+                    <td>{pod.name}</td>
+                    <td>
+                      <span
+                        className={`status-badge ${
+                          pod.status.toLowerCase() === 'running'
+                            ? 'status-running'
+                            : pod.status.toLowerCase() === 'pending'
+                              ? 'status-pending'
+                              : 'status-failed'
+                        }`}
+                      >
+                        {pod.status}
+                      </span>
+                    </td>
+                    <td>{pod.age}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
